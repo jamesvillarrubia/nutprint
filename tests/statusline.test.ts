@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { computeTotals, formatAlmonds, formatStatusLine } from '../src/cli/statusline.js';
+import {
+  CUP_THRESHOLD_LITERS,
+  GAL_THRESHOLD_LITERS,
+  GAL_PER_LITER,
+  TSP_PER_LITER,
+  TSP_PER_CUP,
+  LITERS_PER_ALMOND,
+} from '../src/config/constants.js';
 import type { LedgerEntry } from '../src/types/usage.js';
 
 // computeTotals's "Day" boundary is local midnight; pin the test process to
@@ -29,9 +37,17 @@ describe('computeTotals', () => {
 });
 
 describe('formatAlmonds', () => {
-  it('rounds to a whole number below 10', () => {
-    expect(formatAlmonds(0.0028)).toBe('0');
+  it('keeps one decimal below 1, so a sub-1 value never rounds up to a bare "1"', () => {
+    expect(formatAlmonds(0.0028)).toBe('0.0');
+    expect(formatAlmonds(0.82)).toBe('0.8');
+  });
+
+  it('rounds to a whole number from 1 up to 10', () => {
     expect(formatAlmonds(9.6)).toBe('10');
+  });
+
+  it('rounds to a whole number at the sub-1/integer-rounding boundary', () => {
+    expect(formatAlmonds(1)).toBe('1');
   });
 
   it('keeps one decimal at or above 10', () => {
@@ -42,9 +58,50 @@ describe('formatAlmonds', () => {
 
 describe('formatStatusLine', () => {
   it('renders the exact display format', () => {
-    // dayLiters -> tsp: 0.01 * 202.9 = 2.029 -> "2.0"; almonds: 0.01 / 6.2 = 0.0016 -> "0"
-    // weekLiters -> gal: 5 * 0.264172 = 1.32086 -> "1.3"; almonds: 5 / 6.2 = 0.8065 -> "1"
+    // dayLiters -> tsp: 0.01 * 202.9 = 2.029 -> "2.0"; almonds: 0.01 / 6.2 = 0.0016 -> "0.0"
+    // weekLiters -> gal: 5 * 0.264172 = 1.32086 -> "1.3"; almonds: 5 / 6.2 = 0.8065 -> "0.8"
     const line = formatStatusLine(0.01, 5);
-    expect(line).toBe('🥜 Day: 2.0 tsp = 0 almonds · Week: 1.3 gal = 1 almonds');
+    expect(line).toBe('🥜 Day: 2.0 tsp = 0.0 almonds · Week: 1.3 gal = 0.8 almonds');
+  });
+
+  it('shows Day in cups once it clears the tsp tier (1 L = 202.9 tsp / 48 tsp per cup = 4.2 cups)', () => {
+    // dayLiters=1 -> almonds: 1 / 6.2 = 0.1613 -> "0.2"
+    // weekLiters=6.2 -> gal: 6.2 * 0.264172 = 1.6379 -> "1.6"; almonds: 6.2 / 6.2 = 1 -> "1"
+    const line = formatStatusLine(1, 6.2);
+    expect(line).toBe('🥜 Day: 4.2 cups = 0.2 almonds · Week: 1.6 gal = 1 almonds');
+  });
+
+  it('shows Day in gal (Week formatting) once it clears the cup tier (10 * 0.264172 = 2.6417 -> "2.6")', () => {
+    // dayLiters=10 -> almonds: 10 / 6.2 = 1.6129 -> "2"
+    // weekLiters=6.2 -> gal: 1.6379 -> "1.6"; almonds: 6.2 / 6.2 = 1 -> "1"
+    const line = formatStatusLine(10, 6.2);
+    expect(line).toBe('🥜 Day: 2.6 gal = 2 almonds · Week: 1.6 gal = 1 almonds');
+  });
+
+  it('lands exactly at CUP_THRESHOLD_LITERS in the cups tier, not tsp', () => {
+    // At dayLiters == CUP_THRESHOLD_LITERS, formatDay's `< CUP_THRESHOLD_LITERS`
+    // check is false, so it falls into the cups branch (== TSP_PER_CUP tsp == 1 cup).
+    const dayCups = ((CUP_THRESHOLD_LITERS * TSP_PER_LITER) / TSP_PER_CUP).toFixed(1);
+    const dayAlmonds = formatAlmonds(CUP_THRESHOLD_LITERS / LITERS_PER_ALMOND);
+    const weekGal = (0 * GAL_PER_LITER).toFixed(1);
+    const weekAlmonds = formatAlmonds(0 / LITERS_PER_ALMOND);
+    const line = formatStatusLine(CUP_THRESHOLD_LITERS, 0);
+    expect(line).toBe(`🥜 Day: ${dayCups} cups = ${dayAlmonds} almonds · Week: ${weekGal} gal = ${weekAlmonds} almonds`);
+  });
+
+  it('lands exactly at GAL_THRESHOLD_LITERS in the gal tier, not cups', () => {
+    // At dayLiters == GAL_THRESHOLD_LITERS, formatDay's `< GAL_THRESHOLD_LITERS`
+    // check is false, so it falls into the gal branch (== 1 gal, same formatting Week uses).
+    const dayGal = (GAL_THRESHOLD_LITERS * GAL_PER_LITER).toFixed(1);
+    const dayAlmonds = formatAlmonds(GAL_THRESHOLD_LITERS / LITERS_PER_ALMOND);
+    const weekGal = (0 * GAL_PER_LITER).toFixed(1);
+    const weekAlmonds = formatAlmonds(0 / LITERS_PER_ALMOND);
+    const line = formatStatusLine(GAL_THRESHOLD_LITERS, 0);
+    expect(line).toBe(`🥜 Day: ${dayGal} gal = ${dayAlmonds} almonds · Week: ${weekGal} gal = ${weekAlmonds} almonds`);
+  });
+
+  it('renders the all-zero day/week line', () => {
+    const line = formatStatusLine(0, 0);
+    expect(line).toBe('🥜 Day: 0.0 tsp = 0.0 almonds · Week: 0.0 gal = 0.0 almonds');
   });
 });

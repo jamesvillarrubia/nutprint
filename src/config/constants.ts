@@ -37,6 +37,13 @@ export const LITERS_PER_ALMOND = 6.2;
 export const TSP_PER_LITER = 202.9;
 export const GAL_PER_LITER = 0.264172;
 
+// Derived/definitional, not a citation: 1 US cup = 48 tsp; 1 US gallon =
+// 16 cups = 768 tsp. Used to pick Day's display unit (tsp/cups/gal) so it
+// doesn't show an unbounded tsp count.
+export const TSP_PER_CUP = 48;
+export const CUP_THRESHOLD_LITERS = TSP_PER_CUP / TSP_PER_LITER;
+export const GAL_THRESHOLD_LITERS = (16 * TSP_PER_CUP) / TSP_PER_LITER;
+
 export const LEDGER_RETENTION_DAYS = 30;
 
 export function isAnthropicModel(model: string): boolean {
