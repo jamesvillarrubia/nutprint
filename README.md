@@ -59,3 +59,7 @@ withdrawn), so this project compares it to the blue-water share of a
 California almond's footprint (6.2 L), not the popular blended
 green+blue+grey figure (~12 L) that most "gallons per almond" claims
 quote. Full reasoning and every citation: [`SOURCES.md`](./SOURCES.md).
+
+## License
+
+MIT, see [`LICENSE`](./LICENSE).
