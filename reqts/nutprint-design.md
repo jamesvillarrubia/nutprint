@@ -3,7 +3,8 @@
 ## Outcome
 
 A Claude Code plugin shows a water-usage estimate, converted to almonds, in the
-user's status bar: `🥜 Day: X tsp = Y almonds · Week: X gal = Y almonds`.
+user's status bar: `🥜 Day: X tsp = Y almonds · Week: X gal = Y almonds` (Day's
+unit scales to cups or gal above set thresholds; see "Display format" below).
 "Day" covers every Claude Code session, across every project and every
 account on the machine, since local midnight. "Week" covers the same scope,
 trailing 7 days. Both are cross-session totals; neither is scoped to the
@@ -138,8 +139,13 @@ Per turn, tokens split into four buckets: `input`, `cache_creation`,
    the low green-water share (5.5% of the total footprint) is the same
    physical fact as the state's broader water stress, not a coincidence, and
    `SOURCES.md` says so.
-4. Display units: `liters * 202.9` for teaspoons (Day), `liters * 0.264`
-   for gallons (Week).
+4. Display units: Week always shows gallons: `liters * 0.264172`. Day scales
+   by threshold, using the same gallon formatting Week uses once it clears
+   the gallon threshold: below `CUP_THRESHOLD_LITERS` (1 cup, ~0.237 L)
+   shows teaspoons (`liters * 202.9`); from `CUP_THRESHOLD_LITERS` up to
+   `GAL_THRESHOLD_LITERS` (1 gallon, ~3.785 L) shows cups
+   (`liters * 202.9 / 48`); at or above `GAL_THRESHOLD_LITERS` shows gallons
+   (`liters * 0.264172`), same as Week.
 
 Every non-Anthropic model uses one fallback constant set (documented in
 `constants.ts`) built from the same output-token energy figure and the
@@ -148,13 +154,20 @@ since there is no equivalent named facility to cite.
 
 ## Display format
 
-`🥜 Day: <tsp> tsp = <almonds> almonds · Week: <gal> gal = <almonds> almonds`
+`🥜 Day: <amount> <unit> = <almonds> almonds · Week: <gal> gal = <almonds> almonds`
 
-Rounding: one decimal place for tsp and gal, whole numbers for almonds below
-10, one decimal above 10 (a fractional almond count under 10 reads as a
-rounding artifact; above 10 the fraction is small relative to the whole
-number and worth keeping for the "week" figure to look less suspiciously
-round).
+Day's `<unit>` is tsp, cups, or gal, picked by threshold on the day's raw
+liter total: below `CUP_THRESHOLD_LITERS` (1 cup) shows tsp; from
+`CUP_THRESHOLD_LITERS` up to `GAL_THRESHOLD_LITERS` (1 gallon) shows cups;
+at or above `GAL_THRESHOLD_LITERS` shows gal, formatted the same way Week's
+gallon figure is. Week always shows gal.
+
+Rounding: one decimal place for tsp, cups, and gal. Almonds: below 1 shows
+one decimal (so a small nonzero amount doesn't round to a bare "0"); from 1
+up to 10 rounds to a whole number (a fractional almond count in this range
+reads as a rounding artifact); at or above 10 shows one decimal again (the
+fraction is small relative to the whole number and worth keeping so the
+"week" figure doesn't look suspiciously round).
 
 ## Testing
 
