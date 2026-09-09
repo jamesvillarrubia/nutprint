@@ -14,7 +14,7 @@ import {
 } from '../src/config/constants.js';
 
 describe('constants', () => {
-  it('match the sourced values in reqts/eat-less-almonds-design.md', () => {
+  it('match the sourced values in reqts/nutprint-design.md', () => {
     expect(OUTPUT_JOULES_PER_TOKEN).toBe(1.8);
     expect(INPUT_ENERGY_RATIO).toBe(0.3);
     expect(CACHE_READ_ENERGY_RATIO).toBe(0.1);

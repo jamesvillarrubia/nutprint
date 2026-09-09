@@ -1,4 +1,4 @@
-# eat-less-almonds
+# NutPrint
 
 Shows AI water usage in your Claude Code status bar, converted to
 almonds: `🥜 Day: 3.5 tsp = 1 almonds · Week: 2.4 gal = 150 almonds`.
@@ -16,14 +16,14 @@ where AI's water use is worst and best, not to be exact.
 
 ```bash
 git clone <repo-url>
-cd eat-less-almonds
+cd nutprint
 pnpm install
 pnpm build
 ```
 
 Fill in `<repo-url>` with your own remote once this repo is pushed somewhere.
 
-Then add the plugin to Claude Code (`claude plugin add ./eat-less-almonds`
+Then add the plugin to Claude Code (`claude plugin add ./nutprint`
 or your usual local-plugin flow) so its `Stop` hook starts recording
 usage.
 
@@ -35,7 +35,7 @@ Add to `~/.claude/settings.json`:
 {
   "statusLine": {
     "type": "command",
-    "command": "node /absolute/path/to/eat-less-almonds/dist/cli/statusline.js"
+    "command": "node /absolute/path/to/nutprint/dist/cli/statusline.js"
   }
 }
 ```
@@ -47,7 +47,7 @@ script instead of replacing it:
 #!/usr/bin/env bash
 your-existing-statusline-command
 printf ' · '
-node /absolute/path/to/eat-less-almonds/dist/cli/statusline.js
+node /absolute/path/to/nutprint/dist/cli/statusline.js
 ```
 
 Point `statusLine.command` at that wrapper script instead.

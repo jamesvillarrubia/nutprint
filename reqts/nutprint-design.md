@@ -1,4 +1,4 @@
-# eat-less-almonds: design
+# NutPrint: design
 
 ## Outcome
 
@@ -46,7 +46,7 @@ defaults. Zero runtime dependencies: only `node:fs`, `node:path`, and
 `dist/*.js` files, not the TypeScript source.
 
 ```
-eat-less-almonds/
+nutprint/
   plugin.json                # registers the Stop hook, points at dist/hooks/on-stop.js
   src/
     hooks/
@@ -64,7 +64,7 @@ eat-less-almonds/
     on-stop.test.ts
     statusline.test.ts
   reqts/
-    eat-less-almonds-design.md
+    nutprint-design.md
   SOURCES.md
   README.md
   package.json
@@ -220,8 +220,7 @@ inherent to the technology or the crop.
 
 ## Open questions
 
-- Public plugin name: `eat-less-almonds` is the working repo name; whether
-  that is also the name to announce is undecided.
+- Public plugin name: decided as NutPrint (kebab: `nutprint`).
 - Whether to chain an existing `statusLine.command` automatically (read the
   user's current setting, wrap it) or leave that entirely to the README's
   manual instructions, is deferred to the implementation plan.

@@ -1,6 +1,6 @@
 {
-  "name": "eat-less-almonds",
-  "displayName": "Eat Less Almonds",
+  "name": "nutprint",
+  "displayName": "NutPrint",
   "version": "0.1.0",
   "description": "Shows AI water usage in your status bar, converted to almonds.",
   "author": "James Villarrubia",

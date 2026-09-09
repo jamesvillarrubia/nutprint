@@ -54,7 +54,7 @@ function main(): void {
       const input = JSON.parse(raw) as StopHookInput;
       processStopEvent(input, defaultPaths());
     } catch (err) {
-      process.stderr.write(`eat-less-almonds: on-stop hook failed: ${(err as Error).message}\n`);
+      process.stderr.write(`nutprint: on-stop hook failed: ${(err as Error).message}\n`);
     }
   });
 }

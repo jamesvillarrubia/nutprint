@@ -3,7 +3,7 @@ import { estimateLiters } from '../src/services/estimate.js';
 import type { TokenUsage } from '../src/types/usage.js';
 
 describe('estimateLiters', () => {
-  it('matches the worked example in reqts/eat-less-almonds-design.md for an Anthropic model', () => {
+  it('matches the worked example in reqts/nutprint-design.md for an Anthropic model', () => {
     const usage: TokenUsage = {
       input_tokens: 2,
       cache_creation_input_tokens: 2367,
