@@ -41,8 +41,8 @@ month or year chart reads rollup buckets, not pruned raw entries.
 
 ## Stories
 
-1. ROLLUP-1 · active · unscheduled · on-stop hook writes a per-day
-   rollup bucket alongside each ledger append · tasks 0/1
+1. ROLLUP-1 · done · unscheduled · on-stop hook writes a per-day
+   rollup bucket alongside each ledger append · tasks 1/1
 2. ROLLUP-2 · proposed · unscheduled · statusline reads Day/Week from the
    rollup instead of scanning the full ledger, with a one-time backfill
    for existing installs · tasks 0/1
@@ -55,3 +55,8 @@ month or year chart reads rollup buckets, not pruned raw entries.
    against a full ledger re-scan, to detect drift · tasks 0/1
 
 ## Threads
+- 2026-09-09: ROLLUP-1 shipped (`c0803b2` merge to `main`). Write side only:
+  `rollup.jsonl` maintained incrementally by `on-stop.ts`, survives ledger pruning,
+  backfills once for existing installs. `statusline.ts` still reads the ledger directly;
+  ROLLUP-2 migrates it. Hardening surfaced two follow-ups filed as ROLLUP-3 (concurrent
+  write race) and ROLLUP-4 (reconciliation/verify command).
