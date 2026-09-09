@@ -50,8 +50,12 @@ function main(): void {
     raw += chunk;
   });
   process.stdin.on('end', () => {
-    const input = JSON.parse(raw) as StopHookInput;
-    processStopEvent(input, defaultPaths());
+    try {
+      const input = JSON.parse(raw) as StopHookInput;
+      processStopEvent(input, defaultPaths());
+    } catch (err) {
+      process.stderr.write(`eat-less-almonds: on-stop hook failed: ${(err as Error).message}\n`);
+    }
   });
 }
 

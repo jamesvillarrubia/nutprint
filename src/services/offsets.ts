@@ -7,7 +7,11 @@ export function readOffset(offsetDir: string, sessionId: string): number {
     return 0;
   }
   const content = readFileSync(filePath, 'utf8').trim();
-  return content.length > 0 ? Number(content) : 0;
+  if (content.length === 0) {
+    return 0;
+  }
+  const parsed = Number(content);
+  return Number.isNaN(parsed) ? 0 : parsed;
 }
 
 export function writeOffset(offsetDir: string, sessionId: string, byteOffset: number): void {

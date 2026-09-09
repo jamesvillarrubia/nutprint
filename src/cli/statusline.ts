@@ -37,10 +37,14 @@ export function formatStatusLine(dayLiters: number, weekLiters: number): string 
 }
 
 function main(): void {
-  const ledgerPath = join(homedir(), '.claude', 'almonds', 'ledger.jsonl');
-  const entries = readAllEntries(ledgerPath);
-  const { dayLiters, weekLiters } = computeTotals(entries, new Date());
-  process.stdout.write(formatStatusLine(dayLiters, weekLiters));
+  try {
+    const ledgerPath = join(homedir(), '.claude', 'almonds', 'ledger.jsonl');
+    const entries = readAllEntries(ledgerPath);
+    const { dayLiters, weekLiters } = computeTotals(entries, new Date());
+    process.stdout.write(formatStatusLine(dayLiters, weekLiters));
+  } catch {
+    process.stdout.write('🥜 (unavailable)');
+  }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

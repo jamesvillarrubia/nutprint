@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readOffset, writeOffset } from '../src/services/offsets.js';
@@ -30,5 +30,11 @@ describe('offsets', () => {
     writeOffset(dir, 'session-b', 200);
     expect(readOffset(dir, 'session-a')).toBe(100);
     expect(readOffset(dir, 'session-b')).toBe(200);
+  });
+
+  it('returns 0 for a corrupted, non-numeric offset file', () => {
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'session-a'), 'not-a-number', 'utf8');
+    expect(readOffset(dir, 'session-a')).toBe(0);
   });
 });

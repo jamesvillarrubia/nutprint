@@ -1,4 +1,4 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type { LedgerEntry } from '../types/usage.js';
 
@@ -12,10 +12,18 @@ export function readAllEntries(ledgerPath: string): LedgerEntry[] {
     return [];
   }
   const content = readFileSync(ledgerPath, 'utf8');
-  return content
-    .split('\n')
-    .filter((line) => line.trim().length > 0)
-    .map((line) => JSON.parse(line) as LedgerEntry);
+  const entries: LedgerEntry[] = [];
+  for (const line of content.split('\n')) {
+    if (line.trim().length === 0) {
+      continue;
+    }
+    try {
+      entries.push(JSON.parse(line) as LedgerEntry);
+    } catch {
+      continue;
+    }
+  }
+  return entries;
 }
 
 export function pruneOldEntries(ledgerPath: string, retentionDays: number, now: Date = new Date()): void {
@@ -25,5 +33,7 @@ export function pruneOldEntries(ledgerPath: string, retentionDays: number, now: 
   const cutoffMs = now.getTime() - retentionDays * 24 * 60 * 60 * 1000;
   const remaining = readAllEntries(ledgerPath).filter((entry) => new Date(entry.ts).getTime() >= cutoffMs);
   const body = remaining.map((entry) => JSON.stringify(entry)).join('\n');
-  writeFileSync(ledgerPath, remaining.length > 0 ? `${body}\n` : '', 'utf8');
+  const tmpPath = `${ledgerPath}.tmp`;
+  writeFileSync(tmpPath, remaining.length > 0 ? `${body}\n` : '', 'utf8');
+  renameSync(tmpPath, ledgerPath);
 }
