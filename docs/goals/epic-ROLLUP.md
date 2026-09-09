@@ -46,5 +46,12 @@ month or year chart reads rollup buckets, not pruned raw entries.
 2. ROLLUP-2 · proposed · unscheduled · statusline reads Day/Week from the
    rollup instead of scanning the full ledger, with a one-time backfill
    for existing installs · tasks 0/1
+3. ROLLUP-3 · proposed · unscheduled · orphaned, found during ROLLUP-1
+   hardening — concurrent Stop events race on rollup.jsonl's
+   read-modify-write with no lock; needs a dependency or custom locking,
+   both out of this epic's current Won't list · tasks 0/1
+4. ROLLUP-4 · proposed · unscheduled · orphaned, found during ROLLUP-1
+   hardening — a reconciliation/verify command comparing rollup totals
+   against a full ledger re-scan, to detect drift · tasks 0/1
 
 ## Threads
