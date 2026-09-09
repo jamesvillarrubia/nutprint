@@ -28,5 +28,13 @@ to wrap it instead of replacing it.
 
 1. POLISH-1 · proposed · unscheduled · detect an existing
    `statusLine.command` and offer to wrap it · tasks 0/1
+2. POLISH-2 · proposed · unscheduled · James reported live: Day showed
+   "1034.4 tsp = 1 almonds" (5.1 L / 6.2 = 0.82, rounds to "1" per the
+   below-10 whole-number rule). Math checks out against constants.ts, not
+   a bug; likely this exact session's own 250+-turn cache_read volume
+   since the Stop hook went live mid-session. Real gaps: (a) no unit
+   scaling past tsp for Day as the number grows (illegible past ~1 cup),
+   (b) rounding 0.82 up to a bare "1" understates/misleads next to a
+   large raw-unit figure · tasks 0/1
 
 ## Threads
