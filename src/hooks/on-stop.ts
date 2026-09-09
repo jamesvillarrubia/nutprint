@@ -4,6 +4,7 @@ import { LEDGER_RETENTION_DAYS } from '../config/constants.js';
 import { estimateLiters } from '../services/estimate.js';
 import { appendEntry, pruneOldEntries } from '../services/ledger.js';
 import { readOffset, writeOffset } from '../services/offsets.js';
+import { addToRollup, backfillRollupIfMissing, localDateKey } from '../services/rollup.js';
 import { readNewUsageRecords } from '../services/transcript.js';
 import type { LedgerEntry } from '../types/usage.js';
 
@@ -15,6 +16,7 @@ export interface StopHookInput {
 export interface StopHookPaths {
   ledgerPath: string;
   offsetDir: string;
+  rollupPath: string;
 }
 
 export function defaultPaths(): StopHookPaths {
@@ -22,24 +24,35 @@ export function defaultPaths(): StopHookPaths {
   return {
     ledgerPath: join(base, 'ledger.jsonl'),
     offsetDir: join(base, 'offsets'),
+    rollupPath: join(base, 'rollup.jsonl'),
   };
 }
 
 export function processStopEvent(input: StopHookInput, paths: StopHookPaths, now: Date = new Date()): void {
+  backfillRollupIfMissing(paths.rollupPath, paths.ledgerPath);
+
   const fromByte = readOffset(paths.offsetDir, input.session_id);
   const { records, newOffset } = readNewUsageRecords(input.transcript_path, fromByte);
 
+  let newLiters = 0;
   for (const record of records) {
+    const liters = estimateLiters(record.usage, record.model);
     const entry: LedgerEntry = {
       ts: now.toISOString(),
       session_id: input.session_id,
       model: record.model,
-      liters: estimateLiters(record.usage, record.model),
+      liters,
     };
     appendEntry(paths.ledgerPath, entry);
+    newLiters += liters;
   }
 
   writeOffset(paths.offsetDir, input.session_id, newOffset);
+
+  if (records.length > 0) {
+    addToRollup(paths.rollupPath, localDateKey(now), newLiters);
+  }
+
   pruneOldEntries(paths.ledgerPath, LEDGER_RETENTION_DAYS, now);
 }
 
