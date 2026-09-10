@@ -15,12 +15,12 @@ import {
 
 describe('constants', () => {
   it('match the sourced values in reqts/nutprint-design.md', () => {
-    expect(OUTPUT_JOULES_PER_TOKEN).toBe(1.8);
-    expect(INPUT_ENERGY_RATIO).toBe(0.3);
+    expect(OUTPUT_JOULES_PER_TOKEN).toBe(9.4);
+    expect(INPUT_ENERGY_RATIO).toBe(0.06);
     expect(CACHE_READ_ENERGY_RATIO).toBe(0.1);
     expect(ANTHROPIC_DC_WUE_L_PER_KWH).toBe(0.15);
     expect(FALLBACK_DC_WUE_L_PER_KWH).toBe(1.9);
-    expect(GRID_WATER_L_PER_KWH).toBe(1.8);
+    expect(GRID_WATER_L_PER_KWH).toBe(3.142);
     expect(LITERS_PER_ALMOND).toBe(6.2);
     expect(TSP_PER_LITER).toBe(202.9);
     expect(GAL_PER_LITER).toBe(0.264172);

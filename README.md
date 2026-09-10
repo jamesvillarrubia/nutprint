@@ -52,6 +52,8 @@ node /absolute/path/to/nutprint/dist/cli/statusline.js
 
 Point `statusLine.command` at that wrapper script instead.
 
+Add `--short` for a compact form instead of the default: `D 11.3🥜 | W 11.3🥜`.
+
 ## Why the numbers are what they are
 
 Short version: a data center's water draw is blue water (physically
