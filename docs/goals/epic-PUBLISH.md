@@ -44,13 +44,26 @@ working statusline.
 
 ## Stories
 
-1. PUBLISH-1 · proposed · unscheduled · README and `plugin.json` name this
+1. PUBLISH-1 · done · unscheduled · README and `plugin.json` name this
    repository's real URL, license, and a one-line description a stranger
-   can act on without asking James · tasks 0/1
-2. PUBLISH-2 · proposed · unscheduled · CI runs typecheck, test, and build
-   on every push and pull request · tasks 0/1
-3. PUBLISH-3 · proposed · unscheduled · a fresh clone, following only the
+   can act on without asking James · tasks 1/1
+2. PUBLISH-2 · done · unscheduled · CI runs typecheck, test, and build
+   on every push and pull request · tasks 1/1
+3. PUBLISH-3 · done · unscheduled · a fresh clone, following only the
    README, produces a working statusline on a machine that has never seen
-   this repo · tasks 0/1
+   this repo · tasks 1/1
 
 ## Threads
+- 2026-09-09: All three stories shipped in one pass (`47ddbd1`/`4de849f` merge for
+  PUBLISH-1/2, PR #1/`6bb03c7` for the CI badge that also verified PUBLISH-2's
+  `pull_request` trigger, PUBLISH-3 verified by a real fresh clone into scratch that built
+  and ran clean via README's own steps alone). Both `test:` Done-when items hold with
+  command evidence (`docs/tmp/story-PUBLISH-{1,2,3}.md`). The two `James:` items (a
+  no-context reader reaches a working statusline; SOURCES.md reads as trustworthy to
+  someone who didn't watch it get written) were proxy-verified this session — the
+  PUBLISH-3 fresh-clone smoke test stands in for the first, and a completeness check
+  confirmed every constant that feeds the water/almond calculation (7 of `constants.ts`'s
+  13 exports; the other 6 are unit-conversion or policy constants, already flagged
+  "derived/definitional, not a citation" in `constants.ts` itself) has a named source or
+  flagged assumption in `SOURCES.md` — but neither is James's own read. Flagged to James
+  as still open in that specific sense.
