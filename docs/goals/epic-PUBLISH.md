@@ -60,10 +60,19 @@ working statusline.
   and ran clean via README's own steps alone). Both `test:` Done-when items hold with
   command evidence (`docs/tmp/story-PUBLISH-{1,2,3}.md`). The two `James:` items (a
   no-context reader reaches a working statusline; SOURCES.md reads as trustworthy to
-  someone who didn't watch it get written) were proxy-verified this session — the
-  PUBLISH-3 fresh-clone smoke test stands in for the first, and a completeness check
+  someone who didn't watch it get written) were proxy-verified this session. The
+  PUBLISH-3 fresh-clone smoke test stands in for the first. A completeness check
   confirmed every constant that feeds the water/almond calculation (7 of `constants.ts`'s
   13 exports; the other 6 are unit-conversion or policy constants, already flagged
   "derived/definitional, not a citation" in `constants.ts` itself) has a named source or
-  flagged assumption in `SOURCES.md` — but neither is James's own read. Flagged to James
-  as still open in that specific sense.
+  flagged assumption in `SOURCES.md`, for the second. Neither is James's own read, though;
+  flagged to James as still open in that specific sense.
+- 2026-09-09: Re-audited `SOURCES.md` adversarially (re-fetched the Jegham et al. paper's
+  abstract and its Table 4/Table 1 directly, quote-checked against what had been written).
+  Found and fixed a real defect: the paper's authors were misattributed ("Jegham, Shourou,
+  Perakis, and Yasseri" instead of the actual Jegham, Abdelatti, Koh, Elmoubarki, and
+  Hendawi), a citation error a skeptical reader would have caught immediately by trying to
+  look the paper up. Also added the paper's own verbatim methodology sentence for the
+  off-site WUE figure, and fixed a stray em-dash the writing gate should have caught before
+  it shipped. The energy/water numbers themselves were independently re-verified against
+  the paper's Table 4 and Table 1 and matched exactly; only the citation text was wrong.

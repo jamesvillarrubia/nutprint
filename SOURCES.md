@@ -6,9 +6,10 @@ each one comes from and works the example the tests check against.
 ## Energy per token
 
 - `OUTPUT_JOULES_PER_TOKEN = 9.4` and `INPUT_ENERGY_RATIO = 0.06`: fit to
-  Jegham, Shourou, Perakis, and Yasseri, "How Hungry is AI? Benchmarking
-  Energy, Water, and Carbon Footprint of LLM Inference" (arXiv 2505.09598,
-  2025). Not peer-reviewed (arXiv preprint), but the only source found that
+  Jegham, Abdelatti, Koh, Elmoubarki, and Hendawi, "How Hungry is AI?
+  Benchmarking Energy, Water, and Carbon Footprint of LLM Inference"
+  (arXiv:2505.09598). Not peer-reviewed (arXiv preprint, first posted May
+  2025, revised through at least v6), but the only source found that
   measures actual Claude requests rather than an industry-wide average or a
   back-solved estimate.
 
@@ -41,9 +42,9 @@ each one comes from and works the example the tests check against.
   an aggregate across Microsoft's own production models, not a per-model or
   per-provider breakdown, and Microsoft's own blog post summarizing it
   ("Scaling AI with 8 to 20x energy efficiency," June 2026) cites this same
-  paper for its "0.0–0.067 mL water per query" claim — so the low-end
-  figures researched for this project all trace back to one source, and
-  that source isn't Claude-specific. Jegham et al. is the only source found
+  paper for its "0.0–0.067 mL water per query" claim. The low-end figures
+  researched for this project all trace back to one source, and that
+  source isn't Claude-specific. Jegham et al. is the only source found
   that measures Claude requests directly, at the cost of not being
   peer-reviewed.
 
@@ -69,12 +70,13 @@ each one comes from and works the example the tests check against.
   facility to cite for an arbitrary provider.
 - `GRID_WATER_L_PER_KWH = 3.142`: Jegham et al.'s Anthropic/AWS-specific
   source (off-site) water intensity, the water evaporated per kWh of
-  electricity generated, on top of data-center cooling water. Replaces
-  this project's earlier figure of 1.8 L/kWh (EIA/USGS US national
-  thermoelectric average) now that a source tied to the same
-  infrastructure as the energy constants above is available; 1.8 was a
-  generic national figure, not specific to the grid AWS's Virginia and
-  Indiana regions actually draw from.
+  electricity generated, on top of data-center cooling water. The paper's
+  own words for how it assigns this figure (Section 4.1): "For AWS-hosted
+  Anthropic and Meta models, we apply AWS-reported PUE and site-level WUE,
+  using U.S. national averages for source WUE." Replaces this project's
+  earlier figure of 1.8 L/kWh (a different EIA/USGS reading of that same
+  U.S. national thermoelectric average) now that a source tied to the
+  same infrastructure as the energy constants above is available.
 
 ## Almonds
 
