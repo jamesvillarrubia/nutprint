@@ -15,13 +15,11 @@ where AI's water use is worst and best, not to be exact.
 ## Install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/jamesvillarrubia/nutprint.git
 cd nutprint
 pnpm install
 pnpm build
 ```
-
-Fill in `<repo-url>` with your own remote once this repo is pushed somewhere.
 
 Then add the plugin to Claude Code (`claude plugin add ./nutprint`
 or your usual local-plugin flow) so its `Stop` hook starts recording
