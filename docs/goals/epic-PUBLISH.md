@@ -76,3 +76,24 @@ working statusline.
   off-site WUE figure, and fixed a stray em-dash the writing gate should have caught before
   it shipped. The energy/water numbers themselves were independently re-verified against
   the paper's Table 4 and Table 1 and matched exactly; only the citation text was wrong.
+- 2026-09-10: Continued the adversarial audit past Jegham et al. to every other citation in
+  `SOURCES.md`. Re-fetched or searched primary sources for Project Rainier's 0.15 L/kWh
+  (confirmed via a second independent source), the Fulton et al. almond study (fetched the
+  actual Almond Board factsheet PDF; its per-almond gallon figures reconcile with our
+  per-pound numbers), `FALLBACK_DC_WUE_L_PER_KWH=1.9` (confirmed as a commonly-cited
+  industry figure, no single named study pinned), and the Regional-spread section's
+  Arizona/Microsoft/Oracle claims (corroborated by multiple sources on the 1-9 L/kWh
+  evaporative-cooling range and Microsoft's own zero-water-cooling announcements). Found
+  and fixed one more real defect: the claim that `GRID_WATER_L_PER_KWH`'s old (1.8) and
+  new (3.142) values were "the same EIA/USGS average read differently" was invented to
+  paper over a gap. They're different measurements (thermoelectric-only consumptive use
+  vs. a full-generation-mix source-water figure); rewrote honestly with an
+  independently-found corroborating range (EWIF 0.8-9 L/kWh).
+  After this, the Stop hook (`/goal`, set by James specifically on this epic's Done-when
+  text) kept re-firing on the fourth item for roughly 10 further turns with no new input
+  from James. Held rather than loop: there is no tool available to clear the goal or
+  invoke `/cutover` from inside the model, and the item is a deliberate `James:` trust
+  gate, not something further autonomous work can discharge. James then typed
+  `/cutover go`. Epic status stays `proposed`; PUBLISH-1/2/3 are all genuinely done with
+  evidence, but this epic does not move to `done` until James has read `SOURCES.md`
+  himself and says so.
