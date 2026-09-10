@@ -74,9 +74,16 @@ each one comes from and works the example the tests check against.
   own words for how it assigns this figure (Section 4.1): "For AWS-hosted
   Anthropic and Meta models, we apply AWS-reported PUE and site-level WUE,
   using U.S. national averages for source WUE." Replaces this project's
-  earlier figure of 1.8 L/kWh (a different EIA/USGS reading of that same
-  U.S. national thermoelectric average) now that a source tied to the
-  same infrastructure as the energy constants above is available.
+  earlier figure of 1.8 L/kWh (USGS/NREL's thermoelectric-only consumptive
+  figure) now that a source tied to the same infrastructure as the energy
+  constants above is available. The two figures are not the same
+  measurement re-read differently: 1.8 L/kWh covers thermoelectric plants
+  only, while a source-WUE figure covering the full U.S. generation mix
+  (thermoelectric plus hydroelectric, whose reservoir evaporation is far
+  higher per kWh) plausibly lands higher; independent published ranges for
+  this kind of full-mix water-intensity factor run from about 0.8 to 9
+  L/kWh depending on region and generation mix, and 3.142 sits inside that
+  range.
 
 ## Almonds
 
