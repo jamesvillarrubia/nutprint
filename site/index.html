@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NutPrint: AI's water cost, in almonds</title>
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="NutPrint: AI's water cost, in almonds" />
+  <meta property="og:description" content="A Claude Code status bar plugin that converts your AI water usage into almonds, so the number means something." />
+  <meta property="og:url" content="https://jamesvillarrubia.github.io/nutprint/" />
+  <meta property="og:image" content="https://jamesvillarrubia.github.io/nutprint/img/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="675" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="NutPrint: AI's water cost, in almonds" />
+  <meta name="twitter:description" content="A Claude Code status bar plugin that converts your AI water usage into almonds, so the number means something." />
+  <meta name="twitter:image" content="https://jamesvillarrubia.github.io/nutprint/img/og-image.jpg" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="img/favicon-512.png" />
+  <link rel="apple-touch-icon" href="img/favicon-180.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #0a0714;
+      --bg-alt: #120f24;
+      --card: #17132b;
+      --border: #352a5c;
+      --fg: #f1ecff;
+      --muted: #a79bd1;
+      --pink: #ff3ea5;
+      --cyan: #38dbff;
+      --purple: #9d6bff;
+      --almond: #d9a066;
+      --term-green: #39ff88;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, #2a1a52 0%, transparent 60%),
+        var(--bg);
+      color: var(--fg);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      body {
+        cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0NiIgdmlld0JveD0iMCAwIDQwIDQ2Ij4KPGRlZnM+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMC4xIiB5MT0iMCIgeDI9IjAuOSIgeTI9IjEiPgogICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZDlhMDY2Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjAuNTUiIHN0b3AtY29sb3I9IiNjOTgwM2YiLz4KICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2FkNmMyZSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPGcgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDIwIDIzKSI+CjxwYXRoIGQ9Ik0yMCA0IEMzMCAxMCAzNCAyMCAzNCAyOCBDMzQgMzcgMjggNDQgMjAgNDQgQzEyIDQ0IDYgMzcgNiAyOCBDNiAyMCAxMCAxMCAyMCA0IFoiCiAgICAgIGZpbGw9InVybCgjYSkiIHN0cm9rZT0iIzZiM2YxOCIgc3Ryb2tlLXdpZHRoPSIxLjMiLz4KPHBhdGggZD0iTTIwIDggQzE4IDE2IDE3IDI3IDE4IDM5IiBzdHJva2U9IiM2YjNmMTgiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC41IiBmaWxsPSJub25lIi8+CjxwYXRoIGQ9Ik0yMy41IDkgQzI1IDE4IDI2IDI4IDIzLjUgNDAiIHN0cm9rZT0iIzZiM2YxOCIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjQiIGZpbGw9Im5vbmUiLz4KPHBhdGggZD0iTTE2LjUgMTAgQzE0LjUgMTggMTMuNSAyOCAxNS41IDM4IiBzdHJva2U9IiM2YjNmMTgiIHN0cm9rZS13aWR0aD0iMSIgb3BhY2l0eT0iMC40IiBmaWxsPSJub25lIi8+CjxwYXRoIGQ9Ik0yNi41IDEzIEMyOC41IDIwIDI5IDI3IDI2IDM1IiBzdHJva2U9IiM2YjNmMTgiIHN0cm9rZS13aWR0aD0iMC44IiBvcGFjaXR5PSIwLjMiIGZpbGw9Im5vbmUiLz4KPHBhdGggZD0iTTEzLjUgMTMgQzExLjUgMjAgMTEgMjcgMTQgMzUiIHN0cm9rZT0iIzZiM2YxOCIgc3Ryb2tlLXdpZHRoPSIwLjgiIG9wYWNpdHk9IjAuMyIgZmlsbD0ibm9uZSIvPgo8Y2lyY2xlIGN4PSIyNC41IiBjeT0iMjIiIHI9IjAuOSIgZmlsbD0iIzVhMzUxMiIgb3BhY2l0eT0iMC41Ii8+CjxjaXJjbGUgY3g9IjE5IiBjeT0iMzEiIHI9IjAuOCIgZmlsbD0iIzVhMzUxMiIgb3BhY2l0eT0iMC40Ii8+CjxjaXJjbGUgY3g9IjI3IiBjeT0iMzAiIHI9IjAuNyIgZmlsbD0iIzVhMzUxMiIgb3BhY2l0eT0iMC40Ii8+CjxjaXJjbGUgY3g9IjE1IiBjeT0iMjQiIHI9IjAuNyIgZmlsbD0iIzVhMzUxMiIgb3BhY2l0eT0iMC4zNSIvPgo8L2c+Cjwvc3ZnPgo=") 18 6, auto;
+      }
+    }
+
+    main { max-width: 720px; margin: 0 auto; padding: 0 0 4rem; }
+
+    .hero-wrap { width: 100%; overflow: hidden; border-bottom: 1px solid var(--border); }
+    .hero {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 1;
+      object-fit: cover;
+    }
+    @media (max-width: 640px) {
+      .hero { aspect-ratio: 2 / 3; }
+    }
+
+    .content { padding: 2rem 1.5rem 0; }
+
+    h1 {
+      font-family: "Orbitron", -apple-system, sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      letter-spacing: 0.03em;
+      margin: 0 0 0.4rem;
+      background: linear-gradient(90deg, var(--cyan), var(--purple) 55%, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .tagline {
+      color: var(--muted);
+      margin: 0 0 1.75rem;
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    }
+
+    .statusline {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--term-green);
+      background: #050308;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin: 0 0 2rem;
+      font-size: clamp(0.8rem, 2.2vw, 0.95rem);
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre;
+      box-shadow: 0 0 18px -6px var(--cyan);
+    }
+
+    p { margin: 0 0 1.1rem; }
+    a { color: var(--cyan); text-decoration-color: rgba(56, 219, 255, 0.4); }
+    a:hover { color: var(--pink); }
+
+    h2 {
+      font-family: "Orbitron", -apple-system, sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin: 2.25rem 0 0.9rem;
+    }
+
+    .terminal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 0 0 1.25rem;
+    }
+    .terminal-bar {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.55rem 0.7rem;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+    }
+    .terminal-bar span {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #4a4363;
+    }
+    .terminal-bar span:nth-child(1) { background: #ff5f57; }
+    .terminal-bar span:nth-child(2) { background: #febc2e; }
+    .terminal-bar span:nth-child(3) { background: #28c840; }
+    pre {
+      margin: 0;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.85rem;
+      color: var(--fg);
+    }
+    code { color: var(--almond); }
+
+    .links {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .pill {
+      display: inline-block;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .pill:hover { border-color: var(--pink); color: var(--pink); }
+
+    footer {
+      margin-top: 3rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .water-drop {
+      position: fixed;
+      left: 0; top: 0;
+      width: 0; height: 0;
+      pointer-events: none;
+      z-index: 9999;
+      animation: drop-fall 750ms ease-in forwards;
+    }
+    .water-drop-shape {
+      position: absolute;
+      left: 0; top: 0;
+      width: 9px; height: 11px;
+      background: radial-gradient(circle at 30% 30%, #d6f3ff, #38b6f0 60%, #1f7bc4);
+      border-radius: 50% 50% 50% 0;
+      transform: translate(-50%, -50%) rotate(135deg);
+    }
+    @keyframes drop-fall {
+      0%   { opacity: 0.9; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(28px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-wrap">
+    <picture>
+      <source media="(max-width: 640px)" srcset="img/hero-portrait.jpg" />
+      <img class="hero" src="img/hero-wide.jpg" alt="A sunglassed cartoon almond typing on a laptop next to a scale piled with almonds and a retro terminal reading &quot;NUTPRINT dot 2,481 almonds,&quot; on a neon synthwave grid." />
+    </picture>
+  </div>
+
+  <main>
+    <div class="content">
+      <h1>NutPrint</h1>
+
+      <p>Your Claude Code sessions use water. That's bad.</p>
+      <p>But so do showers. Hand washing. Cooking. Drinking. Those are good.</p>
+      <p>Most of the things humans do with water are things we <em>actually
+      want to keep doing</em>.</p>
+      <p>So why is AI's water usage bad? And how bad is it?</p>
+      <p>The problem is that once you're talking in gallons and liters, the
+      number gets pretty hard to picture. Is 10 gallons a lot? Compared to
+      what? A shower? A load of laundry? Your morning coffee?</p>
+      <p>You could compare it to drinking water or showers, but those are
+      things we'd generally like to encourage. Nobody wants a dehydrated
+      developer. Nobody wants a smelly one either (you know who you are).</p>
+      <p>But you know what the world could absolutely do with less of?</p>
+      <p><strong>Fucking almonds.</strong></p>
+      <p>So I built <strong>NutPrint</strong>.</p>
+      <p>It's a <strong>Claude Code &rarr; water footprint &rarr;
+      almond footprint converter</strong> that puts the result directly in
+      your Claude Code status bar.</p>
+
+      <div class="statusline">D 1🥜 | W 150🥜</div>
+      <p>or the long form, with <code>--long</code>:</p>
+      <div class="statusline">🥜 Day: 3.5 tsp = 1 almonds &middot; Week: 2.4 gal = 150 almonds</div>
+
+      <p>Because we should absolutely care about the water used by AI.</p>
+      <p>But we should probably also care about what we're using that water
+      <em>for</em>.</p>
+      <p>Almonds are notoriously water-intensive. Global-average estimates
+      put the water footprint of shelled almonds at roughly
+      <strong>16,000 liters per kilogram</strong>. California-specific
+      research has estimated roughly <strong>3.2 gallons per almond</strong>.</p>
+      <p>And almonds aren't exactly alone.</p>
+      <p>Your almond milk? <strong>~30 gallons of water per carton</strong>
+      for the cheap stuff. <strong>Hundreds of gallons</strong> for the
+      fancy stuff.</p>
+      <p>Beef? <strong>~4,000 gallons per kilogram</strong> globally, versus
+      <strong>~4,300 per kilogram</strong> in almonds. And per gram of
+      protein, beef and almonds are about the same.</p>
+      <p>That fifth pair of fast-fashion jeans you don't need?
+      <strong>Roughly 1,000&ndash;2,000 gallons</strong>, depending on the
+      lifecycle methodology
+      (<a href="https://good-brands.earth/water-footprint-of-jeans/" target="_blank" rel="noopener">good-brands.earth</a>).</p>
+      <p>So if you want to complain about AI's water usage, by all means.</p>
+      <p><strong>Come at me, bro.</strong></p>
+      <p>But I'm going to look at your almond milk.</p>
+      <p>And your beef.</p>
+      <p>And your $19 pair of jeans you'll wear four times before they rip
+      at the inseam.</p>
+      <p><strong>Hell, AI code is ~4&times; faster than humans, and saves
+      roughly half a gallon of water for every hour of software development
+      it replaces.</strong></p>
+      <p>Because if we're going to start counting drops, let's count all of
+      them.</p>
+
+      <h2>The math</h2>
+      <p>NutPrint reads Claude Code's own token-usage records and converts
+      them into an estimated water footprint, then into almonds.</p>
+      <p>The almond number is intentionally ridiculous, yes, but the
+      methodology isn't.</p>
+      <p>Every constant behind the calculation traces to a named source or
+      a clearly flagged assumption in
+      <a href="https://github.com/jamesvillarrubia/nutprint/blob/main/SOURCES.md">SOURCES.md</a>.</p>
+      <p>NutPrint itself adds essentially no additional water footprint: it
+      runs locally on token-usage data Claude Code has already recorded. No
+      additional AI calls. Just math, almonds, and an increasingly
+      uncomfortable awareness of agricultural water consumption.</p>
+
+      <h2>Install</h2>
+      <div class="terminal">
+        <div class="terminal-bar"><span></span><span></span><span></span></div>
+        <pre><code>claude plugin marketplace add jamesvillarrubia/nutprint
+claude plugin install nutprint@nutprint</code></pre>
+      </div>
+      <p>Then, inside Claude Code, run <code>/nutprint:setup-statusline</code>
+      to point your status bar at it. No manual JSON editing.</p>
+      <p>Run <code>claude plugin update nutprint</code> to pick up future
+      releases. No reinstall ritual required.</p>
+      <p>Full setup instructions are in the
+      <a href="https://github.com/jamesvillarrubia/nutprint#install">README</a>.</p>
+
+      <div class="links">
+        <a class="pill" href="https://github.com/jamesvillarrubia/nutprint">GitHub repo</a>
+        <a class="pill" href="https://github.com/jamesvillarrubia/nutprint/blob/main/SOURCES.md">Sources &amp; math</a>
+      </div>
+
+      <footer>MIT licensed. Built with an unreasonable number of almonds.</footer>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!canHover || reduced) return;
+
+      var lastX = null, lastY = null;
+      var MIN_DIST = 14, MAX_DROPS = 40, active = 0;
+
+      document.addEventListener("pointermove", function (e) {
+        if (lastX !== null) {
+          var dx = e.clientX - lastX, dy = e.clientY - lastY;
+          if (dx * dx + dy * dy < MIN_DIST * MIN_DIST) return;
+        }
+        lastX = e.clientX;
+        lastY = e.clientY;
+        if (active >= MAX_DROPS) return;
+        spawnDrop(e.clientX, e.clientY);
+      });
+
+      function spawnDrop(x, y) {
+        active++;
+        var d = document.createElement("span");
+        d.className = "water-drop";
+        var shape = document.createElement("span");
+        shape.className = "water-drop-shape";
+        d.appendChild(shape);
+        d.style.left = x + "px";
+        d.style.top = y + "px";
+        document.body.appendChild(d);
+        d.addEventListener("animationend", function () {
+          d.remove();
+          active--;
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "nutprint",
+  "owner": {
+    "name": "James Villarrubia"
+  },
+  "plugins": [
+    {
+      "name": "nutprint",
+      "source": "./",
+      "description": "Shows AI water usage in your status bar, converted to almonds.",
+      "version": "0.1.0"
+    }
+  ]
+}

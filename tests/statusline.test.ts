@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { computeTotals, formatAlmonds, formatStatusLine, formatStatusLineShort } from '../src/cli/statusline.js';
+import {
+  computeTotals,
+  formatAlmonds,
+  formatStatusLine,
+  formatStatusLineShort,
+  renderStatusLine,
+} from '../src/cli/statusline.js';
 import {
   CUP_THRESHOLD_LITERS,
   GAL_THRESHOLD_LITERS,
@@ -116,5 +122,19 @@ describe('formatStatusLineShort', () => {
   it('renders the all-zero day/week line', () => {
     const line = formatStatusLineShort(0, 0);
     expect(line).toBe('D 0.0🥜 | W 0.0🥜');
+  });
+});
+
+describe('renderStatusLine', () => {
+  it('defaults to the short form with no flags', () => {
+    expect(renderStatusLine([], 70.06, 70.06)).toBe(formatStatusLineShort(70.06, 70.06));
+  });
+
+  it('renders the short form when --short is passed, same as the default', () => {
+    expect(renderStatusLine(['--short'], 70.06, 70.06)).toBe(formatStatusLineShort(70.06, 70.06));
+  });
+
+  it('renders the long form when --long is passed', () => {
+    expect(renderStatusLine(['--long'], 0.01, 5)).toBe(formatStatusLine(0.01, 5));
   });
 });

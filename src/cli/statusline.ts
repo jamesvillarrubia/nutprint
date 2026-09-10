@@ -60,15 +60,18 @@ export function formatStatusLineShort(dayLiters: number, weekLiters: number): st
   return `D ${dayAlmonds}🥜 | W ${weekAlmonds}🥜`;
 }
 
+export function renderStatusLine(argv: string[], dayLiters: number, weekLiters: number): string {
+  return argv.includes('--long')
+    ? formatStatusLine(dayLiters, weekLiters)
+    : formatStatusLineShort(dayLiters, weekLiters);
+}
+
 function main(): void {
   try {
     const ledgerPath = join(homedir(), '.claude', 'almonds', 'ledger.jsonl');
     const entries = readAllEntries(ledgerPath);
     const { dayLiters, weekLiters } = computeTotals(entries, new Date());
-    const line = process.argv.includes('--short')
-      ? formatStatusLineShort(dayLiters, weekLiters)
-      : formatStatusLine(dayLiters, weekLiters);
-    process.stdout.write(line);
+    process.stdout.write(renderStatusLine(process.argv, dayLiters, weekLiters));
   } catch {
     process.stdout.write('🥜 (unavailable)');
   }

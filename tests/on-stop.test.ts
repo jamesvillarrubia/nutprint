@@ -1,8 +1,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { defaultPaths, processStopEvent } from '../src/hooks/on-stop.js';
+import {
+  defaultPaths,
+  defaultStatuslineTargetPath,
+  processStopEvent,
+  resolveStatuslineSource,
+  syncStatusline,
+} from '../src/hooks/on-stop.js';
 import { appendEntry, readAllEntries } from '../src/services/ledger.js';
 import { readOffset } from '../src/services/offsets.js';
 import { localDateKey, readRollup } from '../src/services/rollup.js';
@@ -161,5 +167,44 @@ describe('defaultPaths', () => {
   it('includes rollupPath alongside ledgerPath and offsetDir under the same base directory', () => {
     const paths = defaultPaths();
     expect(paths.rollupPath.endsWith(join('almonds', 'rollup.jsonl'))).toBe(true);
+  });
+});
+
+describe('resolveStatuslineSource', () => {
+  it('resolves the sibling dist/cli/statusline.js relative to the hook module URL, whatever version directory it runs from', () => {
+    const url = 'file:///Users/x/.claude/plugins/cache/nutprint/nutprint/0.1.0/dist/hooks/on-stop.js';
+    expect(resolveStatuslineSource(url)).toBe(
+      join('/Users/x/.claude/plugins/cache/nutprint/nutprint/0.1.0/dist/cli/statusline.js'),
+    );
+  });
+});
+
+describe('defaultStatuslineTargetPath', () => {
+  it('lives under ~/.claude/almonds, alongside the ledger, so the path never moves', () => {
+    expect(defaultStatuslineTargetPath().endsWith(join('almonds', 'statusline.js'))).toBe(true);
+  });
+});
+
+describe('syncStatusline', () => {
+  it('copies the source file to the target path, creating parent directories', () => {
+    const src = join(dir, 'source-statusline.js');
+    writeFileSync(src, 'console.log("v1")', 'utf8');
+    const target = join(dir, 'nested', 'statusline.js');
+
+    syncStatusline(src, target);
+
+    expect(readFileSync(target, 'utf8')).toBe('console.log("v1")');
+  });
+
+  it('overwrites an existing target on each sync, so a version bump is picked up without a reinstall', () => {
+    const src = join(dir, 'source-statusline.js');
+    const target = join(dir, 'statusline.js');
+    writeFileSync(src, 'v1', 'utf8');
+    syncStatusline(src, target);
+
+    writeFileSync(src, 'v2', 'utf8');
+    syncStatusline(src, target);
+
+    expect(readFileSync(target, 'utf8')).toBe('v2');
   });
 });

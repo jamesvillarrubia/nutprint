@@ -3,7 +3,9 @@
   "displayName": "NutPrint",
   "version": "0.1.0",
   "description": "Shows AI water usage in your status bar, converted to almonds.",
-  "author": "James Villarrubia",
+  "author": {
+    "name": "James Villarrubia"
+  },
   "license": "MIT",
   "repository": "https://github.com/jamesvillarrubia/nutprint",
   "hooks": {

@@ -79,5 +79,10 @@ release; each version meets this bar or it does not ship.
   default.
 - Every commit that changes a number in `constants.ts` updates
   `SOURCES.md` in the same commit.
+- Every commit that changes `src/` rebuilds and commits `dist/` in the
+  same commit. `dist/` is tracked in git (not gitignored) because the
+  plugin marketplace install pulls a `github`-source repo with no build
+  step; CI fails the build if `dist/` drifts from `src/`
+  (`.github/workflows/ci.yml`'s `git diff --exit-code -- dist` check).
 - James commits directly to `main`; an outside contributor's change goes
   through a PR.
