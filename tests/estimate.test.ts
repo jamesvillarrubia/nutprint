@@ -13,13 +13,13 @@ describe('estimateLiters', () => {
 
     const liters = estimateLiters(usage, 'claude-sonnet-5');
 
-    // output: 6240 * 1.8 = 11232 J
-    // input: 2 * 1.8 * 0.3 = 1.08 J
-    // cache_creation: 2367 * 1.8 * 0.3 = 1278.18 J
-    // cache_read: 106518 * 1.8 * 0.1 = 19173.24 J
-    // total: 31684.5 J = 0.00880125 kWh
-    // liters: 0.00880125 * (0.15 + 1.8) = 0.0171624375
-    expect(liters).toBeCloseTo(0.0171624375, 8);
+    // output: 6240 * 9.4 = 58656 J
+    // input: 2 * 9.4 * 0.06 = 1.128 J
+    // cache_creation: 2367 * 9.4 * 0.06 = 1334.988 J
+    // cache_read: 106518 * 9.4 * 0.1 = 100126.92 J
+    // total: 160119.036 J = 0.04447751 kWh
+    // liters: 0.04447751 * (0.15 + 3.142) = 0.14641996292
+    expect(liters).toBeCloseTo(0.14641996292, 8);
   });
 
   it('uses the fallback WUE for a non-Anthropic model', () => {
@@ -32,9 +32,9 @@ describe('estimateLiters', () => {
 
     const liters = estimateLiters(usage, 'gpt-4o');
 
-    // output: 1000 * 1.8 = 1800 J = 0.0005 kWh
-    // liters: 0.0005 * (1.9 + 1.8) = 0.00185
-    expect(liters).toBeCloseTo(0.00185, 8);
+    // output: 1000 * 9.4 = 9400 J = 0.0026111111 kWh
+    // liters: 0.0026111111 * (1.9 + 3.142) = 0.0131652222
+    expect(liters).toBeCloseTo(0.0131652222, 8);
   });
 
   it('returns 0 for all-zero usage', () => {

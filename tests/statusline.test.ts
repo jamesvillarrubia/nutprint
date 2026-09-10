@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeTotals, formatAlmonds, formatStatusLine } from '../src/cli/statusline.js';
+import { computeTotals, formatAlmonds, formatStatusLine, formatStatusLineShort } from '../src/cli/statusline.js';
 import {
   CUP_THRESHOLD_LITERS,
   GAL_THRESHOLD_LITERS,
@@ -103,5 +103,18 @@ describe('formatStatusLine', () => {
   it('renders the all-zero day/week line', () => {
     const line = formatStatusLine(0, 0);
     expect(line).toBe('🥜 Day: 0.0 tsp = 0.0 almonds · Week: 0.0 gal = 0.0 almonds');
+  });
+});
+
+describe('formatStatusLineShort', () => {
+  it('renders "D <almonds>🥜 | W <almonds>🥜" with no unit conversion', () => {
+    // dayLiters=70.06 -> almonds: 70.06 / 6.2 = 11.3; weekLiters=70.06 -> same
+    const line = formatStatusLineShort(70.06, 70.06);
+    expect(line).toBe('D 11.3🥜 | W 11.3🥜');
+  });
+
+  it('renders the all-zero day/week line', () => {
+    const line = formatStatusLineShort(0, 0);
+    expect(line).toBe('D 0.0🥜 | W 0.0🥜');
   });
 });

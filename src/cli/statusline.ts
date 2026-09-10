@@ -54,12 +54,21 @@ export function formatStatusLine(dayLiters: number, weekLiters: number): string 
   return `🥜 Day: ${dayDisplay} = ${dayAlmonds} almonds · Week: ${weekGal} gal = ${weekAlmonds} almonds`;
 }
 
+export function formatStatusLineShort(dayLiters: number, weekLiters: number): string {
+  const dayAlmonds = formatAlmonds(dayLiters / LITERS_PER_ALMOND);
+  const weekAlmonds = formatAlmonds(weekLiters / LITERS_PER_ALMOND);
+  return `D ${dayAlmonds}🥜 | W ${weekAlmonds}🥜`;
+}
+
 function main(): void {
   try {
     const ledgerPath = join(homedir(), '.claude', 'almonds', 'ledger.jsonl');
     const entries = readAllEntries(ledgerPath);
     const { dayLiters, weekLiters } = computeTotals(entries, new Date());
-    process.stdout.write(formatStatusLine(dayLiters, weekLiters));
+    const line = process.argv.includes('--short')
+      ? formatStatusLineShort(dayLiters, weekLiters)
+      : formatStatusLine(dayLiters, weekLiters);
+    process.stdout.write(line);
   } catch {
     process.stdout.write('🥜 (unavailable)');
   }

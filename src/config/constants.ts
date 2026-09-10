@@ -3,16 +3,18 @@
 // assumption. See SOURCES.md for the full citation list and the worked
 // example these numbers feed.
 
-// Energy per output token. Cited: mid-range empirical LLM-inference
-// energy-per-token measurements (~1.8 J/token).
-export const OUTPUT_JOULES_PER_TOKEN = 1.8;
+// Energy per output token. Cited: fit to Jegham et al.'s measured
+// Claude-3.7-Sonnet energy at three context lengths (~9.4 J/token).
+export const OUTPUT_JOULES_PER_TOKEN = 9.4;
 
-// Assumption, not a citation: prefill/encoding is cheaper per token than
-// autoregressive decode. Applied to input and cache_creation tokens.
-export const INPUT_ENERGY_RATIO = 0.3;
+// Cited: same fit as OUTPUT_JOULES_PER_TOKEN. Long-context input tokens
+// measure far cheaper per token than short-context ones (prefill
+// amortizes with length), landing near 0.06, not the 0.3 this project
+// used to assume. Applied to input and cache_creation tokens.
+export const INPUT_ENERGY_RATIO = 0.06;
 
 // Assumption, not a citation: a KV-cache hit is a memory lookup, not a
-// full forward pass.
+// full forward pass. No paper measures this bucket directly.
 export const CACHE_READ_ENERGY_RATIO = 0.1;
 
 // Cited: AWS's reported water-usage-effectiveness at the Project Rainier
@@ -24,10 +26,12 @@ export const ANTHROPIC_DC_WUE_L_PER_KWH = 0.15;
 // not Anthropic's, since there is no equivalent named facility to cite.
 export const FALLBACK_DC_WUE_L_PER_KWH = 1.9;
 
-// Cited: EIA/USGS average US thermoelectric consumptive water use, the
-// water cost of generating the electricity itself, on top of
-// data-center cooling.
-export const GRID_WATER_L_PER_KWH = 1.8;
+// Cited: Jegham et al.'s Anthropic/AWS-specific source (off-site) water
+// intensity, the water cost of generating the electricity itself, on
+// top of data-center cooling. Supersedes this project's earlier
+// EIA/USGS national-average figure (1.8) with a source tied directly to
+// the same infrastructure the energy constants above are fit to.
+export const GRID_WATER_L_PER_KWH = 3.142;
 
 // Cited: blue-water-only share of a California almond's water footprint.
 // 12 L/almond total footprint * 51.6% blue water (Fulton et al.,

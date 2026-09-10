@@ -106,21 +106,24 @@ Per turn, tokens split into four buckets: `input`, `cache_creation`,
 `cache_read`, `output`.
 
 1. Energy per bucket, in Wh:
-   - `output`: `tokens * 1.8 J/token` (~5e-4 Wh/token). Cited: mid-range
-     empirical LLM-inference energy-per-token measurements (see
+   - `output`: `tokens * 9.4 J/token`. Cited: fit to Jegham et al.'s
+     measured Claude-3.7-Sonnet energy at three context lengths (see
      `SOURCES.md`).
-   - `input` and `cache_creation`: `tokens * (0.3 * 1.8 J/token)`.
-     **Assumption**, not a citation: prefill/encoding is cheaper per token
-     than autoregressive decode.
-   - `cache_read`: `tokens * (0.1 * 1.8 J/token)`. **Assumption**, not a
+   - `input` and `cache_creation`: `tokens * (0.06 * 9.4 J/token)`. Cited:
+     same fit. Long-context input tokens measure far cheaper per token
+     than short-context ones.
+   - `cache_read`: `tokens * (0.1 * 9.4 J/token)`. **Assumption**, not a
      citation: a KV-cache hit is a memory lookup, not a full forward pass.
    - Sum the four, convert J to Wh, then to kWh.
-2. Water, in liters: `kWh * (0.15 + 1.8)`.
+2. Water, in liters: `kWh * (0.15 + 3.142)`.
    - `0.15` L/kWh: AWS's reported water-usage-effectiveness at the Project
      Rainier campus (New Carlisle, Indiana), the facility where Anthropic
      trains and serves Claude on its Trainium2 fleet. Cited.
-   - `1.8` L/kWh: EIA/USGS average US thermoelectric consumptive water use,
-     covering the water cost of generating the electricity itself. Cited.
+   - `3.142` L/kWh: Jegham et al.'s Anthropic/AWS-specific source (off-site)
+     water intensity, the water cost of generating the electricity itself.
+     Cited; supersedes this project's earlier EIA/USGS national-average
+     figure (1.8) now that a source tied to the same infrastructure as the
+     energy constants above is available.
 3. Almonds: `liters / 6.2`. `6.2` L/almond is the blue-water-only share of a
    California almond's footprint: a study commissioned by the Almond Board
    of California (Fulton et al., "Water-indexed benefits and impacts of
@@ -155,6 +158,10 @@ since there is no equivalent named facility to cite.
 ## Display format
 
 `🥜 Day: <amount> <unit> = <almonds> almonds · Week: <gal> gal = <almonds> almonds`
+
+A `--short` flag on the CLI selects a compact form instead:
+`D <almonds>🥜 | W <almonds>🥜`. Same almond rounding as the long form, no
+unit conversion (day and week are both almond counts only, no tsp/cups/gal).
 
 Day's `<unit>` is tsp, cups, or gal, picked by threshold on the day's raw
 liter total: below `CUP_THRESHOLD_LITERS` (1 cup) shows tsp; from
