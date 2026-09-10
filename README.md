@@ -1,5 +1,7 @@
 # NutPrint
 
+[![CI](https://github.com/jamesvillarrubia/nutprint/actions/workflows/ci.yml/badge.svg)](https://github.com/jamesvillarrubia/nutprint/actions/workflows/ci.yml)
+
 Shows AI water usage in your Claude Code status bar, converted to
 almonds: `🥜 Day: 3.5 tsp = 1 almonds · Week: 2.4 gal = 150 almonds`.
 
