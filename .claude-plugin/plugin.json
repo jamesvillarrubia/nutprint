@@ -1,7 +1,7 @@
 {
   "name": "nutprint",
   "displayName": "NutPrint",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Shows AI water usage in your status bar, converted to almonds.",
   "author": {
     "name": "James Villarrubia"
