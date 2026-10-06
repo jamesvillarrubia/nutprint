@@ -94,18 +94,16 @@ function writeOffset(offsetDir, sessionId, byteOffset) {
 // src/services/rollup.ts
 import { existsSync as existsSync3, mkdirSync as mkdirSync3, readFileSync as readFileSync3, renameSync as renameSync2, writeFileSync as writeFileSync3 } from "fs";
 import { dirname as dirname2 } from "path";
+
+// src/services/rollup-totals.ts
 function localDateKey(date) {
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
   const dd = String(date.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 }
-function readRollup(rollupPath) {
+function parseRollup(content) {
   const rollup = /* @__PURE__ */ new Map();
-  if (!existsSync3(rollupPath)) {
-    return rollup;
-  }
-  const content = readFileSync3(rollupPath, "utf8");
   for (const line of content.split("\n")) {
     if (line.trim().length === 0) {
       continue;
@@ -118,6 +116,14 @@ function readRollup(rollupPath) {
     }
   }
   return rollup;
+}
+
+// src/services/rollup.ts
+function readRollup(rollupPath) {
+  if (!existsSync3(rollupPath)) {
+    return /* @__PURE__ */ new Map();
+  }
+  return parseRollup(readFileSync3(rollupPath, "utf8"));
 }
 function writeRollup(rollupPath, rollup) {
   mkdirSync3(dirname2(rollupPath), { recursive: true });

@@ -9,7 +9,7 @@ const marketplace = JSON.parse(
   ),
 );
 const pluginManifest = JSON.parse(
-  readFileSync(fileURLToPath(new URL('../plugin.json', import.meta.url)), 'utf-8'),
+  readFileSync(fileURLToPath(new URL('../.claude-plugin/plugin.json', import.meta.url)), 'utf-8'),
 );
 
 describe('.claude-plugin/marketplace.json', () => {

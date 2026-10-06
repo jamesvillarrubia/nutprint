@@ -2,14 +2,6 @@
 import { homedir } from "os";
 import { join } from "path";
 
-// src/config/constants.ts
-var LITERS_PER_ALMOND = 6.2;
-var TSP_PER_LITER = 202.9;
-var GAL_PER_LITER = 0.264172;
-var TSP_PER_CUP = 48;
-var CUP_THRESHOLD_LITERS = TSP_PER_CUP / TSP_PER_LITER;
-var GAL_THRESHOLD_LITERS = 16 * TSP_PER_CUP / TSP_PER_LITER;
-
 // src/services/ledger.ts
 import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "fs";
 import { dirname } from "path";
@@ -32,24 +24,15 @@ function readAllEntries(ledgerPath) {
   return entries;
 }
 
-// src/cli/statusline.ts
-var DAY_MS = 24 * 60 * 60 * 1e3;
-function computeTotals(entries, now) {
-  const dayStartMs = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const weekStartMs = now.getTime() - 7 * DAY_MS;
-  let dayLiters = 0;
-  let weekLiters = 0;
-  for (const entry of entries) {
-    const tsMs = new Date(entry.ts).getTime();
-    if (tsMs >= weekStartMs) {
-      weekLiters += entry.liters;
-    }
-    if (tsMs >= dayStartMs) {
-      dayLiters += entry.liters;
-    }
-  }
-  return { dayLiters, weekLiters };
-}
+// src/config/constants.ts
+var LITERS_PER_ALMOND = 6.2;
+var TSP_PER_LITER = 202.9;
+var GAL_PER_LITER = 0.264172;
+var TSP_PER_CUP = 48;
+var CUP_THRESHOLD_LITERS = TSP_PER_CUP / TSP_PER_LITER;
+var GAL_THRESHOLD_LITERS = 16 * TSP_PER_CUP / TSP_PER_LITER;
+
+// src/services/format.ts
 function formatAlmonds(n) {
   if (n < 1) return n.toFixed(1);
   return n < 10 ? String(Math.round(n)) : n.toFixed(1);
@@ -74,6 +57,25 @@ function formatStatusLineShort(dayLiters, weekLiters) {
   const dayAlmonds = formatAlmonds(dayLiters / LITERS_PER_ALMOND);
   const weekAlmonds = formatAlmonds(weekLiters / LITERS_PER_ALMOND);
   return `D ${dayAlmonds}\u{1F95C} | W ${weekAlmonds}\u{1F95C}`;
+}
+
+// src/cli/statusline.ts
+var DAY_MS = 24 * 60 * 60 * 1e3;
+function computeTotals(entries, now) {
+  const dayStartMs = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const weekStartMs = now.getTime() - 7 * DAY_MS;
+  let dayLiters = 0;
+  let weekLiters = 0;
+  for (const entry of entries) {
+    const tsMs = new Date(entry.ts).getTime();
+    if (tsMs >= weekStartMs) {
+      weekLiters += entry.liters;
+    }
+    if (tsMs >= dayStartMs) {
+      dayLiters += entry.liters;
+    }
+  }
+  return { dayLiters, weekLiters };
 }
 function renderStatusLine(argv, dayLiters, weekLiters) {
   return argv.includes("--long") ? formatStatusLine(dayLiters, weekLiters) : formatStatusLineShort(dayLiters, weekLiters);

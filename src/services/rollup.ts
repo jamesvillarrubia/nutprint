@@ -1,37 +1,15 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { readAllEntries } from './ledger.js';
+import { localDateKey, parseRollup } from './rollup-totals.js';
 
-interface RollupLine {
-  date: string;
-  liters: number;
-}
-
-export function localDateKey(date: Date): string {
-  const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
+export { localDateKey } from './rollup-totals.js';
 
 export function readRollup(rollupPath: string): Map<string, number> {
-  const rollup = new Map<string, number>();
   if (!existsSync(rollupPath)) {
-    return rollup;
+    return new Map();
   }
-  const content = readFileSync(rollupPath, 'utf8');
-  for (const line of content.split('\n')) {
-    if (line.trim().length === 0) {
-      continue;
-    }
-    try {
-      const parsed = JSON.parse(line) as RollupLine;
-      rollup.set(parsed.date, parsed.liters);
-    } catch {
-      continue;
-    }
-  }
-  return rollup;
+  return parseRollup(readFileSync(rollupPath, 'utf8'));
 }
 
 export function writeRollup(rollupPath: string, rollup: Map<string, number>): void {

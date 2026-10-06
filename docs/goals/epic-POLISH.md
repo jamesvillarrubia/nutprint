@@ -36,5 +36,8 @@ to wrap it instead of replacing it.
    scaling past tsp for Day as the number grows (illegible past ~1 cup),
    (b) rounding 0.82 up to a bare "1" understates/misleads next to a
    large raw-unit figure · tasks 0/1
+3. POLISH-3 · active · unscheduled · NutPrint installs as a Claude Code
+   mod and pins its count under the prompt with no `statusLine` edit ·
+   design `reqts/polish-3-mod.md` · tasks 0/1
 
 ## Threads

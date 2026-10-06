@@ -48,12 +48,15 @@ defaults. Zero runtime dependencies: only `node:fs`, `node:path`, and
 
 ```
 nutprint/
-  plugin.json                # registers the Stop hook, points at dist/hooks/on-stop.js
+  .claude-plugin/plugin.json # registers the Stop hook, points at dist/hooks/on-stop.js
+  hooks/hooks.json           # names dist/mod/register.js, the function-hooks mod (POLISH-3)
   src/
     hooks/
       on-stop.ts              # reads new transcript bytes, appends to ledger
     cli/
       statusline.ts            # statusLine.command entrypoint
+    mod/
+      register.ts              # Node-free mod: pins the count with $.ui.status
     services/
       estimate.ts               # pure function: usage + model -> liters
     config/

@@ -17,10 +17,26 @@ where AI's water use is worst and best, not to be exact.
 
 ## Install
 
+At a Claude Code prompt:
+
+```
+/plugin install nutprint --marketplace jamesvillarrubia/nutprint
+```
+
+Answer `y` to add the marketplace, then pick a scope (user is the default).
+From a shell, the same install is two commands:
+
 ```bash
 claude plugin marketplace add jamesvillarrubia/nutprint
 claude plugin install nutprint@nutprint
 ```
+
+On a Claude Code build that loads function-hook mods, NutPrint pins its
+count under the prompt (`D 11.3🥜 | W 11.3🥜`) by itself, refreshed after
+every turn. Nothing in `settings.json` changes, and you can skip the next
+section. Day is today's total; Week is today plus the six days before it.
+If your `statusLine.command` already runs NutPrint from `~/.claude/almonds/`,
+the mod stays quiet so the count does not show twice.
 
 `claude plugin update nutprint` picks up a new release later; no reinstall,
 no rebuild. This repo also ships its built `dist/` in git for exactly that
@@ -32,7 +48,8 @@ the marketplace install above is just the shorter path.
 
 ## Point your status bar at it
 
-Inside Claude Code, run:
+For a Claude Code build without function-hook mods, or if you want the count
+in the status bar instead, run this inside Claude Code:
 
 ```
 /nutprint:setup-statusline
